@@ -31,7 +31,7 @@ public class info extends Activity
         filename.setText(path); //sets the path (why is this even here? its getting replaced below...)
 
         String s4; //temporary strings to hold the niceified names
-        String s5; //random
+        String s5; //random123
 
         try
         {
