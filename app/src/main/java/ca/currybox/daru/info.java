@@ -1,7 +1,7 @@
 package ca.currybox.daru;
 
 /**
- * Created by Thatonefaggot on 9/7/2014.
+ * Created by Lel on 9/7/2014.
  */
 import android.app.Activity;
 import android.content.Intent;
