@@ -58,5 +58,6 @@ public class info extends Activity
         filename.setText(s5); //replaces the text in the textview... stupid
         //some comment here
         //potentially game breaking comment23s1
+        //lel
     }
 }
