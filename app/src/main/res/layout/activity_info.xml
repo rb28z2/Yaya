@@ -8,5 +8,16 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="data" />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/full_URI"
+        android:text="FULL_URI"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Play with MX Player"
+        android:onClick="playFile"
+        android:layout_marginTop="20dp" />
 
 </LinearLayout>

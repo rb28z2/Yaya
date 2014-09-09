@@ -7,7 +7,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
@@ -26,6 +30,9 @@ public class info extends Activity
         Intent intent = getIntent(); //get initial Intent from calling app
 
         String path = intent.getDataString(); //gets the full uri of the episode (usually a http url from a local proxy)
+
+        TextView uriView = (TextView) findViewById(R.id.full_URI);
+        uriView.setText(path);
 
         TextView filename = (TextView)findViewById(R.id.data); //id of the textview used to show the cleaned up filename
         filename.setText(path); //sets the path (why is this even here? its getting replaced below...)
@@ -57,5 +64,18 @@ public class info extends Activity
 
         filename.setText(s5); //replaces the text in the textview... stupid
         //changed all these comments
+    }
+
+    public void playFile(View v)
+    {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+
+        TextView uriView = (TextView)findViewById(R.id.full_URI);
+        String uri = (String) uriView.getText();
+
+        Uri videoUri = Uri.parse(uri);
+        intent.setDataAndType( videoUri, "application/x-mpegURL" );
+        intent.setPackage( "com.mxtech.videoplayer.ad" );
+        startActivity( intent );
     }
 }
