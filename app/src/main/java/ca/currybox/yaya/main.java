@@ -1,6 +1,7 @@
-package ca.currybox.daru;
+package ca.currybox.yaya;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,7 +13,7 @@ public class main extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        System.out.println("Boobies");
+        //System.out.println("Boobies");
     }
 
 
@@ -30,6 +31,10 @@ public class main extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+
+            Intent intent = new Intent(this, SettingsActivity.class); //intent for the default drop-down menu Settings button
+            startActivity(intent);
+
             return true;
         }
         return super.onOptionsItemSelected(item);
