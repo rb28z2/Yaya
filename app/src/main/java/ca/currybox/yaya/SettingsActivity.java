@@ -1,4 +1,4 @@
-package ca.currybox.daru;
+package ca.currybox.yaya;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;

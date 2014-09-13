@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ca.currybox.daru" >
+    package="ca.currybox.yaya">
 
     <application
         android:allowBackup="true"
@@ -9,7 +9,7 @@
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name="ca.currybox.daru.main"
+            android:name="ca.currybox.yaya.main"
             android:label="@string/app_name">
         <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,15 +17,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="ca.currybox.daru.SettingsActivity">
+        <activity android:name="ca.currybox.yaya.SettingsActivity">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+            <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
         <activity
-            android:name="ca.currybox.daru.info"
+            android:name="ca.currybox.yaya.info"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/app_name"
             android:screenOrientation="portrait">

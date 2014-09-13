@@ -5,7 +5,7 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "ca.currybox.daru"
+        applicationId "ca.currybox.yaya"
         minSdkVersion 16
         targetSdkVersion 20
         versionCode 1
