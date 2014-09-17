@@ -30,7 +30,7 @@ public class info extends Activity {
         TextView uriView = (TextView) findViewById(R.id.full_URI);
         uriView.setText(path);
 
-        TextView filename = (TextView) findViewById(R.id.data); //id of the textview used to show the cleaned up filename
+        TextView filename = (TextView) findViewById(R.id.filename); //id of the textview used to show the cleaned up filename
         filename.setText(path); //sets the path (why is this even here? its getting replaced below...)
 
         String s4; //temporary strings to hold the niceified names
@@ -55,6 +55,15 @@ public class info extends Activity {
 
         filename.setText(s5); //replaces the text in the textview... stupid
         //changed all these comments
+
+        TextView titleView = (TextView) findViewById(R.id.title_view);
+        TextView episodeView = (TextView) findViewById(R.id.episode_view);
+
+        String title = s5.substring(0, s5.lastIndexOf("-") - 1); //extracts the show title (substring from position 0 to last occurrence of "-")
+        String episode = s5.substring(s5.lastIndexOf("-") + 1, s5.lastIndexOf(".")); //extracts episode number (substring from last occurrence of "-" to last occurrence of ".")
+        titleView.setText(title); //sets view accordingly
+        episodeView.setText(episode);
+
     }
 
     public void playFile(View v) {
