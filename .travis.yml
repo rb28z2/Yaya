@@ -1,0 +1,9 @@
+language: android
+android:
+  components:
+    - platform-tools
+    - tools
+    
+    - build-tools-20.0.0
+    - android-16
+    
