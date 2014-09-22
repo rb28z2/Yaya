@@ -13,6 +13,15 @@
 
 
     </PreferenceCategory>
+    <PreferenceCategory
+        android:key="pref_key_theme_category"
+        android:title="UI Options">
 
+        <CheckBoxPreference
+            android:key="dark_pref"
+            android:title="Use dark theme"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>

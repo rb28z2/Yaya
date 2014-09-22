@@ -5,4 +5,5 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="AppTheme.Dark" parent="android:Theme.Holo" />
 </resources>
