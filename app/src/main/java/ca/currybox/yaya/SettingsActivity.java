@@ -1,5 +1,6 @@
 package ca.currybox.yaya;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -20,6 +21,12 @@ public class SettingsActivity extends PreferenceActivity {
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
+
+        SharedPreferences prefs = getSharedPreferences("SettingsActivity", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putBoolean("HaveShownPrefs", true);
+        editor.commit();
     }
 
     public static class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
