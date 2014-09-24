@@ -17,8 +17,10 @@ public class main extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        if (prefs.getBoolean("dark_pref", false)) {
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()); //preferences object
+        if (prefs.getBoolean("dark_pref", false)) //checks if settings checkbox is true to set app into dark mode
+        {
             setTheme(R.style.AppTheme_Dark);
         }
 

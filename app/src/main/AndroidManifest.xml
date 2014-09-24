@@ -2,37 +2,43 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ca.currybox.yaya">
 
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="20" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
         <activity
-            android:name="ca.currybox.yaya.main"
+            android:name=".main"
             android:label="@string/app_name">
-        <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="ca.currybox.yaya.SettingsActivity">
+        <activity
+            android:name=".SettingsActivity"
+            android:theme="@style/AppTheme">
             <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
+                <action android:name="ca.currybox.yaya.SettingsActivity" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="ca.currybox.yaya.info"
+            android:name=".info"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
-
-        <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="http" />
                 <data android:scheme="https" />
                 <data android:scheme="content" />
@@ -47,7 +53,8 @@
                 <data android:mimeType="video/avi" />
                 <data android:mimeType="video/x-matroska" />
             </intent-filter>
-
         </activity>
+
     </application>
+
 </manifest>
