@@ -4,16 +4,14 @@
     <string name="app_name">Yaya</string>
     <string name="hello_world">Nothing here yet yo!</string>
     <string name="action_settings">Settings</string>
-
     <string name="mal_group_heading">MyAnimeList.net settings</string>
     <string name="mal_username">Your MyAnimeList.net username</string>
     <string name="mal_default_username">Your username</string>
-
     <string name="title_heading">Title:</string>
     <string name="episode_heading">Episode:</string>
     <string name="filename">Filename:</string>
     <string name="uri">URI:</string>
     <string name="play_mx">Play with MX Player</string>
-
+    <string name="title_activity_settings2">Main Settings</string>
 
 </resources>
