@@ -20,7 +20,7 @@
         <CheckBoxPreference
             android:key="dark_pref"
             android:title="Use dark theme"
-            android:defaultValue="true" />
+            android:defaultValue="false" />
 
     </PreferenceCategory>
 

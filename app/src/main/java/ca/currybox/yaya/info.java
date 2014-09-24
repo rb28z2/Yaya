@@ -5,6 +5,7 @@ package ca.currybox.yaya;
  */
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -14,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -51,6 +53,17 @@ public class info extends Activity {
         if (prefs.getBoolean("dark_pref", false)) //checks if settings checkbox is true to set app into dark mode
         {
             setTheme(R.style.AppTheme_Dark);
+        }
+
+        SharedPreferences firstLaunch = getSharedPreferences("FirstLaunch", Context.MODE_PRIVATE); //get object for below
+        boolean shownPrefs = firstLaunch.getBoolean("HaveShownPrefs", false); //gets the value to check if application has been launched at least once
+        //Todo: Possibly change this to see if MAL username is non-default
+
+        if (!shownPrefs) { //if preferences have not been previously shown (ie, first launch), go directly to the settings screen
+            Intent intent = new Intent(this, SettingsActivity.class); //intent for the default drop-down menu Settings button
+            startActivity(intent);
+        } else { //otherwise show Toast. placeholder action for now
+            Toast.makeText(getApplicationContext(), "Not first launch", Toast.LENGTH_LONG).show();
         }
 
         setContentView(R.layout.activity_info);
