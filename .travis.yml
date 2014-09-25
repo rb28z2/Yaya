@@ -25,3 +25,5 @@ notifications:
     channels:
       - "irc.rizon.net#bobtest"
     channel_key: '123'
+    template:
+      - "%{repository_name} Build #%{build_number} (%{branch} - %{commit} - %{commit_message} by %{author}): %{message}"
