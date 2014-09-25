@@ -19,3 +19,9 @@ before_script:
   - chmod +x gradlew
 
 script: ./gradlew connectedAndroidTest
+
+notifications:
+  irc:
+    channels:
+      - "irc.rizon.net#bobtest"
+    channel_key: '123'
