@@ -1,17 +1,16 @@
 package ca.currybox.yaya;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.TextView;
 
 /**
  * Created by write_only_memory on 10/3/2014.
  */
-public class SingleItemView extends Activity {
+public class SingleItemView extends ActionBarActivity {
 
     //Declare vars
     private String title;
@@ -25,17 +24,17 @@ public class SingleItemView extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()); //preferences object
-        if (prefs.getBoolean("dark_pref", false)) //checks if settings checkbox is true to set app into dark mode
-        {
-            setTheme(R.style.AppTheme_Dark);
-        }
+        Intent i = getIntent();
+        title = i.getStringExtra("title");
 
         //Get the view from singleitemview.xml
         setContentView(R.layout.singleitemview);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        toolbar.setTitle(title);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Intent i = getIntent();
-        title = i.getStringExtra("title");
+
         Log.i("INFO", title);
         synonyms = i.getStringExtra("synonyms");
 //        Log.i("INFO",synonyms);
