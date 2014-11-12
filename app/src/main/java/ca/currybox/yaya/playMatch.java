@@ -212,7 +212,7 @@ public class playMatch extends ActionBarActivity {
 
                 HttpClient httpClient = new DefaultHttpClient();
                 HttpPost httpPost = new HttpPost("http://myanimelist.net/api/animelist/update/" + show.getId() + ".xml"); //mal update url
-                httpPost.addHeader("User-Agent", "yourAPIkeyHere"); //set user agent
+                httpPost.addHeader("User-Agent", new ApiKey().getKey()); //set user agent
 
                 final String basicAuth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.NO_WRAP); //encode auth
                 httpPost.addHeader("Authorization", basicAuth); //add auth header to request
