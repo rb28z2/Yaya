@@ -40,7 +40,8 @@ public class XMLParser {
             //defaultHttpClient
             DefaultHttpClient client = new DefaultHttpClient();
             HttpGet httpGet = new HttpGet(url);
-            httpGet.setHeader("User-Agent", "yourAPIkeyHere");
+            String apiKey = new ApiKey().getKey();
+            httpGet.setHeader("User-Agent", apiKey);
 
             HttpResponse execute = client.execute(httpGet);
             HttpEntity httpEntity = execute.getEntity();
