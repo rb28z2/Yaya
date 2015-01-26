@@ -20,9 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -46,6 +44,7 @@ public class playMatch extends Fragment implements View.OnClickListener {
 
     private Anime show;
     private String uri;
+    private View view;
 
 
     public playMatch() {
@@ -53,7 +52,7 @@ public class playMatch extends Fragment implements View.OnClickListener {
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.play_match, container, false);
+        view = inflater.inflate(R.layout.play_match, container, false);
 
         /**
          * Following block is required for onclick handlers for buttons and such
@@ -75,6 +74,16 @@ public class playMatch extends Fragment implements View.OnClickListener {
         }
 
 
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        parseInfo();
+    }
+
+    public void parseInfo() {
         uri = getArguments().getString("uri");
 
         TextView filename = (TextView) view.findViewById(R.id.filename); //id of the textview used to show the cleaned up filename
@@ -115,7 +124,7 @@ public class playMatch extends Fragment implements View.OnClickListener {
         String xml = parser.read("user.xml", super.getActivity());
         Document doc = parser.getDomElement(xml);
         List<Anime> animeList = new animeList().getList(doc); //reads the user xml file into memory
-        title = title.replaceAll("[^!~'A-z]", ""); //gets rid of whitespaces and special characters that are not !, ~, or '
+        title = title.replaceAll("[^!~'A-z0-9]", ""); //gets rid of whitespaces and special characters that are not !, ~, or '
         Log.i("Detected title", title);
 
         Button updateButton = (Button) view.findViewById(R.id.update_button);
@@ -124,7 +133,7 @@ public class playMatch extends Fragment implements View.OnClickListener {
         boolean found = false;
         for (int i = 0; i < animeList.size() && !found; i++) {
             String[] synonyms = animeList.get(i).getSynonyms().split(";");
-            String listTitle = animeList.get(i).getTitle().replaceAll("[^!~'A-z]", "");
+            String listTitle = animeList.get(i).getTitle().replaceAll("[^!~'A-z0-9]", "");
             if (title.equalsIgnoreCase(listTitle)) {
                 show = animeList.get(i);
                 TextView match = (TextView) view.findViewById(R.id.match_title);
@@ -143,7 +152,7 @@ public class playMatch extends Fragment implements View.OnClickListener {
                 found = true;
             } else {
                 for (String synonym : synonyms) {
-                    synonym = synonym.replaceAll("[^!~'A-z]", "");
+                    synonym = synonym.replaceAll("[^!~'A-z0-9]", "");
                     if (title.equalsIgnoreCase(synonym)) {
                         show = animeList.get(i);
                         TextView match = (TextView) view.findViewById(R.id.match_title);
@@ -167,15 +176,48 @@ public class playMatch extends Fragment implements View.OnClickListener {
         }
 
         if (!found) {
-            RelativeLayout custom_name_layout = (RelativeLayout) view.findViewById(R.id.custom_naming_container);
-            //custom_name_layout.setVisibility(View.VISIBLE);
-            super.getFragmentManager().beginTransaction().replace(R.id.custom_holder, new animeListView()).commit();
+            customNames customList = new customNames();
+            List<Anime> customTitles = customList.getCustomList(view.getContext());
+            if (customTitles != null) {
+                for (int i = 0; i < customTitles.size(); i++) {
+                    String[] synonyms = customTitles.get(i).getCustom_synonyms().replaceAll("[^!~;'A-z0-9]", "").split(";");
+                    for (String synonym : synonyms) {
+                        if (title.equalsIgnoreCase(synonym)) {
+                            String tempTitle = customTitles.get(i).getTitle();
+                            boolean found1 = false;
+                            for (int j = 0; j < animeList.size() && found1 != true; j++) {
+                                if (tempTitle.equalsIgnoreCase(animeList.get(j).getTitle())) {
+                                    show = animeList.get(j);
+                                    found1 = true;
+                                }
+                            }
+
+
+                            TextView match = (TextView) view.findViewById(R.id.match_title);
+                            match.setText("Match found: " + show.getTitle());
+                            updateButton.setEnabled(true);
+
+                            ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(show.getTitle());
+
+                            TextView mal_ep = (TextView) view.findViewById(R.id.mal_last_ep);
+                            mal_ep.setText(String.valueOf(show.getWatched()));
+
+                            TextView mal_updated = (TextView) view.findViewById(R.id.mal_last_update);
+                            String date = new SimpleDateFormat("MMM dd yyyy 'at' KK:mm:ss a").format(new Date(show.getUpdated() * 1000L));
+                            mal_updated.setText(date);
+
+                            found = true;
+                        }
+                    }
+                }
+            }
+
+
         }
 
-        return view;
+
+        super.getFragmentManager().beginTransaction().replace(R.id.custom_holder, new animeListView()).commit();
     }
-
-
 
 
     @Override
@@ -188,6 +230,7 @@ public class playMatch extends Fragment implements View.OnClickListener {
         switch (V.getId()) {
             case R.id.update_button:
                 update();
+
                 break;
             case R.id.play_button:
                 playFile();

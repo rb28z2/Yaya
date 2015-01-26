@@ -1,6 +1,5 @@
 package ca.currybox.yaya;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -13,11 +12,6 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,15 +29,18 @@ public class SingleItemView extends ActionBarActivity implements View.OnClickLis
     private int watched;
     private int status_id;
     private int updated;
+    private Anime intentShow;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 
-
         Intent i = getIntent();
-        title = i.getStringExtra("title");
+
+        intentShow = (Anime) i.getSerializableExtra("show");
+
+        title = intentShow.getTitle();
 
         //Get the view from singleitemview.xml
         setContentView(R.layout.singleitemview);
@@ -57,19 +54,20 @@ public class SingleItemView extends ActionBarActivity implements View.OnClickLis
         read.setOnClickListener(this);
         write.setOnClickListener(this);
 
-        Log.i("INFO", title);
-        synonyms = i.getStringExtra("synonyms");
-//        Log.i("INFO",synonyms);
-        episodes = i.getIntExtra("episodes", 0);
+        read();
 
-        watched = i.getIntExtra("watched", 0);
-        status_id = i.getIntExtra("status", 0);
-        updated = i.getIntExtra("updated", 0);
+        Log.i("INFO", title);
+        synonyms = intentShow.getSynonyms();
+
+        episodes = intentShow.getEpisodes();
+        watched = intentShow.getWatched();
+
+        status_id = intentShow.getStatus();
+        updated = intentShow.getUpdated();
         String date = new SimpleDateFormat("MMM dd yyyy 'at' KK:mm:ss a").format(new Date(updated * 1000L));
 
-        String status;
-        switch (status_id)
-        {
+        String status = String.valueOf(status_id);
+        switch (status_id) {
             case 1:
                 status = "Currently watching";
                 break;
@@ -86,6 +84,7 @@ public class SingleItemView extends ActionBarActivity implements View.OnClickLis
                 status = "Plan to watch";
                 break;
             default:
+                Log.e("status unknown", status);
                 status = "Unknown... wot";
                 break;
         }
@@ -107,43 +106,71 @@ public class SingleItemView extends ActionBarActivity implements View.OnClickLis
     }
 
     @Override
-    public void onClick(View v)
-    {
-        List<Anime> shows = new ArrayList<Anime>();
-        switch (v.getId())
-        {
+    public void onClick(View v) {
+
+        switch (v.getId()) {
             case R.id.read:
-                TextView test = (TextView) findViewById(R.id.test_field);
-                shows = getCustomList();
-                String out = "";
-                Log.i("list size", "lel");
-                for (int i = 0; i < shows.size(); i++)
-                {
-                    out = out + shows.get(i).getTitle() + ":" + shows.get(i).getSynonyms();
-                }
-                test.setText(out);
+                read();
                 break;
             case R.id.write:
-                shows = getCustomList();
-                if (shows == null)
-                {
-                    Log.i("shows","is null");
-                    shows = new ArrayList<Anime>();
-                }
-                Anime show = new Anime();
-                show.setTitle(title);
-                EditText syn = (EditText) findViewById(R.id.synonyms);
-                show.setSynonyms(String.valueOf(syn.getText()));
-                shows.add(show);
-                write(shows);
+                write();
                 break;
         }
     }
 
+    public void read() {
+        List<Anime> shows;
+        customNames customList = new customNames();
+
+        TextView customNamesList = (TextView) findViewById(R.id.list_custom_names);
+        customNamesList.setText("No custom titles set");
+
+        shows = customList.getCustomList(getApplicationContext());
+        String out;
+        Log.i("list size", "lel");
+        boolean found = false;
+        if (shows != null) {
+            for (int i = 0; i < shows.size() && found != true; i++) {
+                if (intentShow.getTitle().equalsIgnoreCase(shows.get(i).getTitle())) {
+                    out = shows.get(i).getCustom_synonyms();
+                    found = true;
+                    customNamesList.setText(out);
+                    EditText editor = (EditText) findViewById(R.id.synonyms);
+                    editor.setText(out);
+                }
+            }
+        }
+
+    }
+
+    public void write() {
+        List<Anime> shows;
+        customNames customList = new customNames();
+
+        shows = customList.getCustomList(getApplicationContext());
+        if (shows == null) {
+            Log.i("shows", "is null");
+            shows = new ArrayList<>();
+        }
+        Anime show = new Anime();
+        show.copy(intentShow);
+        EditText syn = (EditText) findViewById(R.id.synonyms);
+
+        for (int i = 0; i < shows.size(); i++) {
+            if (intentShow.getTitle().equalsIgnoreCase(shows.get(i).getTitle())) {
+                shows.remove(i);
+            }
+        }
+
+        show.setCustom_synonyms(String.valueOf(syn.getText()));
+        shows.add(show);
+        customList.write(shows, getApplicationContext());
+        read();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId())
-        {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -154,39 +181,5 @@ public class SingleItemView extends ActionBarActivity implements View.OnClickLis
 
     }
 
-    public void write (List<Anime> shows)
-    {
-        try
-        {
-            FileOutputStream fos = getApplicationContext().openFileOutput("custom-names.dat", Context.MODE_PRIVATE);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(shows);
-            oos.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    public List<Anime> getCustomList ()
-    {
-        List<Anime> customList;
-        try
-        {
-            FileInputStream fis = openFileInput("custom-names.dat");
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            customList = (List<Anime>) ois.readObject();
-            ois.close();
-        }
-        catch (Exception e)
-        {
-            customList = null;
-            e.printStackTrace();
-        }
-        Log.i("reader", "done");
-        return customList;
-
-    }
 
 }
