@@ -6,6 +6,6 @@ package ca.currybox.yaya;
 public class ApiKey {
 
     public String getKey() {
-        return "***REMOVED***";
+        return "your api key here";
     }
 }
