@@ -6,6 +6,6 @@ package ca.currybox.yaya;
 public class ApiKey {
 
     public String getKey() {
-        return "your api key here"; //get your api key from mal
+        return "your api key here";
     }
 }
