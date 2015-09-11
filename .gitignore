@@ -4,4 +4,4 @@
 /.idea/libraries
 .DS_Store
 /build
-*/ApiKey.java
+/app/src/main/java/ca/currybox/yaya/ApiKey.java
