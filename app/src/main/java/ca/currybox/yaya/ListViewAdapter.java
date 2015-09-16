@@ -65,7 +65,28 @@ public class ListViewAdapter extends BaseAdapter {
         //Use String.valueOf() to convert int return types to string
         holder.title.setText(animeList.get(position).getTitle());
         holder.episodes.setText(String.valueOf(animeList.get(position).getWatched()) + "/" + String.valueOf(animeList.get(position).getEpisodes()));
-        holder.status.setText(String.valueOf(animeList.get(position).getStatus()));
+        String status;
+        switch (animeList.get(position).getStatus()) {
+            case 1:
+                status = "Currently watching";
+                break;
+            case 2:
+                status = "Completed";
+                break;
+            case 3:
+                status = "On Hold";
+                break;
+            case 4:
+                status = "Dropped";
+                break;
+            case 6:
+                status = "Plan to watch";
+                break;
+            default:
+                status = "Unknown... wot";
+                break;
+        }
+        holder.status.setText(status);
         String date = new SimpleDateFormat("MMM dd yyyy 'at' KK:mm:ss a").format(new Date(animeList.get(position).getUpdated() * 1000L));
         holder.updated.setText(date);
 
