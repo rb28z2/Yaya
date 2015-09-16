@@ -132,8 +132,8 @@ public class playMatch extends Fragment implements View.OnClickListener {
         //iterates through the array and checks if triggered show exists in user list
         boolean found = false;
         for (int i = 0; i < animeList.size() && !found; i++) {
-            String[] synonyms = animeList.get(i).getSynonyms().split(";");
-            String listTitle = animeList.get(i).getTitle().replaceAll("[^!~'A-z0-9]", "");
+            String[] synonyms = animeList.get(i).getSynonyms().split("; ");
+            String listTitle = animeList.get(i).getTitle().replaceAll("[^!~';A-z0-9]", "");
             if (title.equalsIgnoreCase(listTitle)) {
                 show = animeList.get(i);
                 TextView match = (TextView) view.findViewById(R.id.match_title);
@@ -152,7 +152,8 @@ public class playMatch extends Fragment implements View.OnClickListener {
                 found = true;
             } else {
                 for (String synonym : synonyms) {
-                    synonym = synonym.replaceAll("[^!~'A-z0-9]", "");
+
+                    synonym = synonym.replaceAll("[^!~';A-z0-9]", "");
                     if (title.equalsIgnoreCase(synonym)) {
                         show = animeList.get(i);
                         TextView match = (TextView) view.findViewById(R.id.match_title);

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -41,7 +42,7 @@ public class main extends ActionBarActivity {
          * otherwise launch the main app view
          */
 
-        if (i.getAction() == "android.intent.action.VIEW") {
+        if (i.getAction().equals("android.intent.action.VIEW")) {
             Bundle bundle = new Bundle();
             bundle.putString("uri", i.getDataString());
 
@@ -49,6 +50,7 @@ public class main extends ActionBarActivity {
             play.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.body, play).commit();
         } else {
+            Log.i("mainview", "returning here");
             getSupportFragmentManager().beginTransaction().replace(R.id.body, new mainFragment()).commit();
         }
 
