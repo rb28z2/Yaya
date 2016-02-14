@@ -12,7 +12,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -140,7 +140,7 @@ public class playMatch extends Fragment implements View.OnClickListener {
                 match.setText("Filename matched with: " + animeList.get(i).getTitle());
                 updateButton.setEnabled(true);
 
-                ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(show.getTitle());
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(show.getTitle());
 
                 TextView mal_ep = (TextView) view.findViewById(R.id.mal_last_ep);
                 mal_ep.setText(String.valueOf(show.getWatched()));
@@ -160,7 +160,7 @@ public class playMatch extends Fragment implements View.OnClickListener {
                         match.setText("Match found: " + animeList.get(i).getTitle());
                         updateButton.setEnabled(true);
 
-                        ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(show.getTitle());
+                        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(show.getTitle());
 
                         TextView mal_ep = (TextView) view.findViewById(R.id.mal_last_ep);
                         mal_ep.setText(String.valueOf(show.getWatched()));
@@ -186,7 +186,7 @@ public class playMatch extends Fragment implements View.OnClickListener {
                         if (title.equalsIgnoreCase(synonym)) {
                             String tempTitle = customTitles.get(i).getTitle();
                             boolean found1 = false;
-                            for (int j = 0; j < animeList.size() && found1 != true; j++) {
+                            for (int j = 0; j < animeList.size() && !found1; j++) {
                                 if (tempTitle.equalsIgnoreCase(animeList.get(j).getTitle())) {
                                     show = animeList.get(j);
                                     found1 = true;
@@ -198,7 +198,7 @@ public class playMatch extends Fragment implements View.OnClickListener {
                             match.setText("Match found: " + show.getTitle());
                             updateButton.setEnabled(true);
 
-                            ((ActionBarActivity) getActivity()).getSupportActionBar().setTitle(show.getTitle());
+                            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(show.getTitle());
 
                             TextView mal_ep = (TextView) view.findViewById(R.id.mal_last_ep);
                             mal_ep.setText(String.valueOf(show.getWatched()));
