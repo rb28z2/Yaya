@@ -8,7 +8,8 @@ env:
     -
 android:
   components:
-    - build-tools-23.0.0
+    - tools
+    - build-tools-23.0.2
     - extra-google-m2repository
     - extra-android-m2repository
     - addon-google_apis-google-23
