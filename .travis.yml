@@ -8,11 +8,11 @@ env:
     -
 android:
   components:
-    - build-tools-20.0.0
+    - build-tools-23.0.2
     - extra-google-m2repository
     - extra-android-m2repository
-    - addon-google_apis-google-21
-    - android-21
+    - addon-google_apis-google-23
+    - android-23
     
 before_script:
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
