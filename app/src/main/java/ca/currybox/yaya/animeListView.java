@@ -54,11 +54,12 @@ public class animeListView extends Fragment {
                 String url = "http://myanimelist.net/malappinfo.php?u=" + username + "&status=all&type=anime"; //creates a valid url
 
 
-                task.execute(new String[]{url}); //get data asynchronously
+                task.execute(url); //get data asynchronously
 
 
             }
         });
+
 
         return view;
     }
