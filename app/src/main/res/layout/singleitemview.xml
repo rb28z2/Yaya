@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main_layout">
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <include
         android:id="@+id/main_toolbar"
@@ -12,119 +12,138 @@
         />
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/main_toolbar"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin">
+        android:paddingTop="@dimen/activity_vertical_margin">
 
         <TextView
+            android:id="@+id/title_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/title_label"
             android:text="@string/title_heading" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/list_title"
-            android:layout_toRightOf="@id/title_label"
-            android:layout_marginLeft="10dp" />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/title_label" />
+
+        <TextView
             android:id="@+id/episode_label"
-            android:text="@string/episode_heading"
-            android:layout_below="@id/list_title" />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/watched"
-            android:layout_toRightOf="@id/episode_label"
             android:layout_below="@id/list_title"
-            android:layout_marginLeft="10dp" />
+            android:text="@string/episode_heading" />
 
         <TextView
+            android:id="@+id/watched"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/list_title"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/episode_label" />
+
+        <TextView
             android:id="@+id/episodes"
-            android:layout_toRightOf="@id/watched"
-            android:layout_below="@id/list_title" />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/list_title"
+            android:layout_toRightOf="@id/watched" />
+
+        <TextView
             android:id="@+id/status_label"
-            android:text="@string/status_heading"
-            android:layout_below="@id/episode_label" />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/episode_label"
+            android:text="@string/status_heading" />
+
+        <TextView
             android:id="@+id/status"
-            android:layout_toRightOf="@id/status_label"
-            android:layout_below="@id/watched"
-            android:layout_marginLeft="10dp" />
-
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/watched"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/status_label" />
+
+        <TextView
             android:id="@+id/updated_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@id/status_label"
             android:text="Last updated on: "/>
 
         <TextView
+            android:id="@+id/updated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/updated"
-            android:layout_toRightOf="@id/updated_label"
-            android:layout_below="@id/status_label"/>
-
+            android:layout_below="@id/status_label"
+            android:layout_toRightOf="@id/updated_label" />
         <TextView
+            android:id="@+id/plot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/updated"
-            android:layout_marginTop="20dp"
-            android:text="LEL"
-            android:id="@+id/list_custom_names"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="READ"
-            android:layout_below="@id/list_custom_names"
-            android:layout_marginTop="20dp"
-            android:visibility="gone"
-            android:id="@+id/read"/>
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:text="Synopsis" />
 
         <TextView
+            android:id="@+id/summary_box"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_below="@id/plot"
+            android:layout_marginTop="10dp"
+            android:scrollbars="vertical"
+            android:text="abc"
+
+            />
+
+        <TextView
+            android:id="@+id/list_custom_names"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/summary_box"
+            android:layout_marginTop="10dp"
+            android:text="LEL" />
+
+        <Button
+            android:id="@+id/read"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/list_custom_names"
+            android:layout_marginTop="10dp"
+            android:text="READ"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/syn_helper"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/read"
-            android:text="Enter custom names below, separated by a semicolon"
-            android:layout_marginTop="20dp"
-            android:id="@+id/syn_helper"/>
+            android:layout_marginTop="10dp"
+            android:text="Enter custom names below, separated by a semicolon" />
 
         <EditText
+            android:id="@+id/synonyms"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="Synonyms"
             android:layout_below="@id/syn_helper"
-            android:layout_marginTop="20dp"
-            android:id="@+id/synonyms"/>
+            android:layout_marginTop="10dp"
+            android:hint="Synonyms" />
 
         <Button
+            android:id="@+id/write"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Set Synonyms"
             android:layout_below="@id/synonyms"
-            android:layout_marginTop="20dp"
-            android:id="@+id/write"/>
+            android:layout_marginTop="10dp"
+            android:text="Set Synonyms" />
 
 
     </RelativeLayout>

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -96,6 +97,7 @@ public class SingleItemView extends ActionBarActivity implements View.OnClickLis
         TextView watchedView = (TextView) main.findViewById(R.id.watched);
         TextView statusView = (TextView) main.findViewById(R.id.status);
         TextView updatedView = (TextView) main.findViewById(R.id.updated);
+        TextView synopsis = (TextView) main.findViewById(R.id.summary_box);
 
         //Set values
         titleView.setText(title);
@@ -103,6 +105,12 @@ public class SingleItemView extends ActionBarActivity implements View.OnClickLis
         watchedView.setText(String.valueOf(watched));
         statusView.setText(status);
         updatedView.setText(date);
+
+        synopsis.setText("...Updating...");
+        NetworkHandler networkHandler = new NetworkHandler();
+        networkHandler.setSynopsis(title, intentShow.getId(), synopsis, getApplicationContext());
+        synopsis.setMovementMethod(new ScrollingMovementMethod());
+        //synopsis.setText(summary);
     }
 
     @Override
