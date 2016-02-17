@@ -2,6 +2,7 @@ package ca.currybox.yaya;
 
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -9,6 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 
 /**
@@ -21,6 +25,10 @@ public class NavigationDrawerFragment extends android.support.v4.app.Fragment {
     private DrawerLayout mDrawerLayout;
 
     private View containerView;
+    private ListView mDrawerList;
+    private ArrayAdapter<String> mAdapter;
+
+
 
     public NavigationDrawerFragment() {
         // Required empty public constructor
@@ -36,8 +44,31 @@ public class NavigationDrawerFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+        View view = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+        mDrawerList = (ListView) view.findViewById(R.id.navList);
+        addDrawerItems();
+        return view;
     }
+
+    private void addDrawerItems() {
+        String[] items = {"File chooser", "Settings"};
+        mAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, items);
+        mDrawerList.setAdapter(mAdapter);
+
+        mDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int ID = ((int) id);
+                switch (ID) {
+                    case 0:
+                        Intent fileExplorer = new Intent(getActivity(), FileExplore.class);
+                        startActivity(fileExplorer);
+                }
+            }
+        });
+    }
+
+
 
 
     public void setUp(int fragmentId, DrawerLayout drawerLayout, final Toolbar toolbar, boolean firstLaunch) {
