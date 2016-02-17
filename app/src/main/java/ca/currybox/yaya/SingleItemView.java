@@ -2,7 +2,7 @@ package ca.currybox.yaya;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Created by write_only_memory on 10/3/2014.
  */
-public class SingleItemView extends ActionBarActivity implements View.OnClickListener {
+public class SingleItemView extends AppCompatActivity implements View.OnClickListener {
 
     //Declare vars
     private String title;
