@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<!--Todo: Rewrite password entry and possibly entire settings layout-->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:key="pref_key_mal_login_settings"
@@ -13,13 +13,12 @@
             android:title="@string/mal_username" />
         <EditTextPreference
             android:dialogTitle="@string/mal_password"
+            android:defaultValue=""
             android:singleLine="true"
             android:key="pref_mal_password"
             android:title="@string/mal_password"
-            android:password="true" />
-
+            android:inputType="textPassword"
+            />
 
     </PreferenceCategory>
-
-
 </PreferenceScreen>

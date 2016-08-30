@@ -9,11 +9,15 @@ import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.widget.EditText;
+import android.widget.CheckBox;
 
 
 public class SettingsActivity extends Activity {
     //@Override
 
+    EditText mEtPwd;
+    CheckBox mCbShowPwd;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

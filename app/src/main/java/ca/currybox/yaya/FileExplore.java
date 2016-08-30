@@ -33,6 +33,7 @@ public class FileExplore extends Activity {
     private File path = new File(Environment.getExternalStorageDirectory() + "");
     private String chosenFile;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -42,8 +43,9 @@ public class FileExplore extends Activity {
 
         showDialog(DIALOG_LOAD_FILE);
         Log.d(TAG, path.getAbsolutePath());
-
     }
+
+
 
     private void loadFileList() {
         try {
