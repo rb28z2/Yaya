@@ -11,6 +11,7 @@ public class Anime implements Serializable {
     private String title;
     private String synonyms;
     private String custom_synonyms;
+    private String image;
     private int episodes;
     private int watched;
     private int status;
@@ -41,6 +42,10 @@ public class Anime implements Serializable {
 
     public void setCustom_synonyms(String synonyms) {
         this.custom_synonyms = synonyms;
+    }
+
+    public String getImageURL() {
+        return image;
     }
 
     public int getEpisodes() {
@@ -103,6 +108,7 @@ public class Anime implements Serializable {
         this.title = show.title;
         this.synonyms = show.synonyms;
         this.episodes = show.episodes;
+        this.image = show.image;
         this.watched = show.watched;
         this.status = show.status;
         this.updated = show.updated;

@@ -5,7 +5,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_launcher" />
+        <!--@TODO Replace this with loading of anime images-->
     <TextView
         android:id="@+id/list_title"
         android:layout_width="wrap_content"
@@ -17,8 +23,12 @@
         android:id="@+id/episode_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/list_title"
-        android:text="@string/episode_heading" />
+        android:text="@string/episode_heading"
+        android:layout_below="@+id/watched"
+        android:layout_toRightOf="@+id/img"
+        android:layout_toEndOf="@+id/img"
+        android:layout_marginLeft="11dp"
+        android:layout_marginStart="11dp" />
 
     <TextView
         android:id="@+id/watched"
@@ -38,8 +48,10 @@
         android:id="@+id/status_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/episode_label"
-        android:text="@string/status_heading" />
+        android:text="@string/status_heading"
+        android:layout_below="@+id/episode_label"
+        android:layout_alignLeft="@+id/episode_label"
+        android:layout_alignStart="@+id/episode_label" />
 
     <TextView
         android:id="@+id/list_status"
@@ -53,15 +65,17 @@
         android:id="@+id/updated_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/status_label"
-        android:text="@string/updated_heading" />
+        android:text="@string/updated_heading"
+        android:layout_below="@+id/status_label"
+        android:layout_alignLeft="@+id/status_label"
+        android:layout_alignStart="@+id/status_label" />
 
     <TextView
         android:id="@+id/updated"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/list_status"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
         android:layout_toRightOf="@id/updated_label" />
 
 </RelativeLayout>

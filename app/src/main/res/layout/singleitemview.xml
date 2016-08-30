@@ -21,11 +21,25 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
 
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_launcher"
+            android:layout_alignTop="@+id/title_label"
+            android:layout_alignBottom="@+id/updated_label"
+            android:layout_toLeftOf="@+id/title_label"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+        <!--@TODO Replace this with loading of anime images-->
         <TextView
             android:id="@+id/title_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_heading" />
+            android:text="@string/title_heading"
+            android:layout_above="@+id/episode_label"
+            android:layout_alignLeft="@+id/episode_label"
+            android:layout_alignStart="@+id/episode_label" />
 
         <TextView
             android:id="@+id/list_title"
@@ -38,8 +52,10 @@
             android:id="@+id/episode_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/list_title"
-            android:text="@string/episode_heading" />
+            android:text="@string/episode_heading"
+            android:layout_below="@+id/list_title"
+            android:layout_alignRight="@+id/write"
+            android:layout_alignEnd="@+id/write" />
 
         <TextView
             android:id="@+id/watched"
@@ -60,8 +76,10 @@
             android:id="@+id/status_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/episode_label"
-            android:text="@string/status_heading" />
+            android:text="@string/status_heading"
+            android:layout_alignTop="@+id/status"
+            android:layout_alignLeft="@+id/episode_label"
+            android:layout_alignStart="@+id/episode_label" />
 
         <TextView
             android:id="@+id/status"
@@ -75,8 +93,11 @@
             android:id="@+id/updated_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/status_label"
-            android:text="Last updated on: "/>
+            android:text="Last updated on: "
+            android:layout_alignBaseline="@+id/updated"
+            android:layout_alignBottom="@+id/updated"
+            android:layout_alignLeft="@+id/status_label"
+            android:layout_alignStart="@+id/status_label" />
 
         <TextView
             android:id="@+id/updated"

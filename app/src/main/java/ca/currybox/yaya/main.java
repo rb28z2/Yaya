@@ -21,6 +21,7 @@ public class main extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //requestion permissions for android 6.0
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
             //should we show an explanation
             if(ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)){
@@ -66,10 +67,9 @@ public class main extends AppCompatActivity {
         } else {
             Log.i("mainview", "returning here");
             getSupportFragmentManager().beginTransaction().replace(R.id.body, new mainFragment()).commit();
+
         }
         Log.i("INTENT", i.getAction());
-
-
 
     }
 

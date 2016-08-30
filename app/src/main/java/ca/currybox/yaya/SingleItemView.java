@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -96,6 +97,7 @@ public class SingleItemView extends AppCompatActivity implements View.OnClickLis
 
         //Locate items in layout
         RelativeLayout main = (RelativeLayout) findViewById(R.id.main_layout);
+        ImageView imageView = (ImageView) main.findViewById(R.id.img);
         TextView titleView = (TextView) main.findViewById(R.id.list_title);
         TextView episodeView = (TextView) main.findViewById(R.id.episodes);
         TextView watchedView = (TextView) main.findViewById(R.id.watched);
@@ -113,6 +115,7 @@ public class SingleItemView extends AppCompatActivity implements View.OnClickLis
         synopsis.setText("...Updating...");
         NetworkHandler networkHandler = new NetworkHandler();
         networkHandler.setSynopsis(title, intentShow.getId(), synopsis, getApplicationContext());
+        networkHandler.setImage(title,intentShow.getId(), imageView, getApplicationContext());
         synopsis.setMovementMethod(new ScrollingMovementMethod());
         //synopsis.setText(summary);
     }
