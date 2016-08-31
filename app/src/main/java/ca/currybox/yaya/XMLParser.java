@@ -45,8 +45,7 @@ public class XMLParser {
     }
 
     public void getXmlFromUrl(String url) {
-
-
+    //@TODO change this to new ASYNC network handler
         try {
             //defaultHttpClient
             DefaultHttpClient client = new DefaultHttpClient();
