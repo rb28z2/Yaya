@@ -21,8 +21,6 @@ import java.util.List;
  * Created by write-only-memory on 1/24/2015.
  */
 public class animeListView extends Fragment {
-
-
     ListView listview;
     ListViewAdapter adapter;
     SwipeRefreshLayout swipeRefreshLayout;
@@ -83,6 +81,7 @@ public class animeListView extends Fragment {
             Document doc = parser.getDomElement(xml);
 
             animeList = new animeList().getList(doc);
+
             return null;
         }
 

@@ -24,10 +24,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import ca.currybox.yaya.malClient;
+import java.nio.charset.StandardCharsets;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -43,6 +44,7 @@ public class NetworkHandler {
 
     private int id;
     private malClient client = new malClient();
+    private String xData;
 
     public void setSynopsis(String title, int id, TextView elem, Context context) {
         ctx = context;
@@ -52,102 +54,76 @@ public class NetworkHandler {
         search.execute(title);
     }
 
-    public void setImage(String title, int id, ImageView elem, Context context, RelativeLayout main) {
+    public void setImage(String xmlData, String title, int id, ImageView elem, Context context, RelativeLayout main) {
         ctx = context;
         final ImageView imgobj = elem;
         final RelativeLayout rLay = main;
-        Boolean contains = false;
 
-        //gets all the files in the files folder
-        File fileDir[] = ctx.getFilesDir().listFiles();
-        File theXML = new File("temp.tmp");
-        int index = 0;
+        //TODO xml data stored in variable in network class soon
+        //System.out.println("madman: " + xmlData);
+        //String syn = getXMLData(title, context);
+        //System.out.println("Bsa: " + syn);
+        System.out.println("Asb: " + xmlData);
+        System.out.println("ccd:" + xData);
+//            syn = xmlData.substring(xmlData.indexOf("<id>" + id + "</id>"));
+//            System.out.println("sadsad: " + syn);
+//
+//            syn = syn.substring(syn.indexOf("<image>") + 7, syn.indexOf("</image>"));
+//            final int animeID = id;
 
-        for(File file : fileDir){
-//            System.out.println(file.getName());
-//            System.out.println("Checking:" + (String.valueOf(id) + ".xml")+ " = " + (fileDir[index].getName()));
-            if(!((String.valueOf(id) + ".xml").equals(fileDir[index].getName()))){
-
-            }
-            else {
-                contains = true;
-                theXML = file;
-                //System.out.println("Size:... " + file.length());
-            }
-            index++;
+//         System.out.println("LINKKKK: " + syn);
+//        client.getFile(syn, null, new AsyncHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+//                try{
+//                    FileOutputStream fos = ctx.openFileOutput(String.valueOf(animeID) + ".jpg", 775);
+//                    fos.write(responseBody);
+//
+//                    File image = ctx.getFileStreamPath(String.valueOf(animeID) + ".jpg");
+//
+//
+//                    Bitmap myBitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
+//
+//                    imgobj.setImageBitmap(myBitmap);
+//                    rLay.addView(imgobj);
+//                } catch (Exception e){
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+//                Log.i("Status Failed Code", String.valueOf(statusCode));
+//                Log.i("Code", String.valueOf(statusCode));
+//                Log.i("Body", String.valueOf(responseBody));
+//                Log.i("Reason", String.valueOf(error));
+//            }
+//        });
         }
 
-        if(!contains){
-            System.out.println("NANIIIIIIIII");
-            //try and download xml or give up
-        }
-        else{
-            XMLParser parser = new XMLParser();
-            String s = parser.read(theXML.getName(), ctx);
-//            System.out.println("sssssssE: \""  + s + "\"");
-
-            String syn = s.substring(s.indexOf("<id>" + id + "</id>"));
-
-            syn = syn.substring(syn.indexOf("<image>") + 7, syn.indexOf("</image>"));
-            final int animeID = id;
-
-//            System.out.println("LINKKKK: " + syn);
-            client.getFile(syn, null, new AsyncHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                    try{
-                        FileOutputStream fos = ctx.openFileOutput(String.valueOf(animeID) + ".jpg", 775);
-                        fos.write(responseBody);
-
-                        File image = ctx.getFileStreamPath(String.valueOf(animeID) + ".jpg");
-
-                        Bitmap myBitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
-
-                        imgobj.setImageBitmap(myBitmap);
-                        rLay.addView(imgobj);
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                    Log.i("Status Failed Code", String.valueOf(statusCode));
-                    Log.i("Code", String.valueOf(statusCode));
-                    Log.i("Body", String.valueOf(responseBody));
-                    Log.i("Reason", String.valueOf(error));
-                }
-            });
-
-            //http://stackoverflow.com/questions/11004744/android-displaying-jpg-image-from-sdcard-using-imageview
-        }
-    }
-
-    public void downloadXML(String title, int id, final Context context){
+    public String getXMLData(String title, Context cntx){
+        ctx = cntx;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx); //preferences object
 
         //get credentials to use basic auth in http request
         String userName = prefs.getString("pref_mal_username", "a");
         String password = prefs.getString("pref_mal_password", "a");
-        final int animeID = id;
+
         try {
             //encode so no url BS
             String encode = URLEncoder.encode(title, "utf-8");
 
             //make a new client to talk to mal
             client.setCreds(userName, password);
-
             //request the .xml for the title in question
+
             client.get(encode, null, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                     Log.i("Status Success Code", String.valueOf(statusCode));
-                    try{
-                        FileOutputStream fos = context.openFileOutput(String.valueOf(animeID) + ".xml", context.MODE_PRIVATE);
-                        fos.write(responseBody);
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
+                    //TODO save xml data in sting instead
+                    xData = new String(responseBody);
+                    client.setData(xData);
                 }
 
                 @Override
@@ -157,10 +133,15 @@ public class NetworkHandler {
                     Log.i("Body", String.valueOf(responseBody));
                     Log.i("Reason", String.valueOf(error));
                 }
-            });
 
+            });
+            //bs inner class workaround
+            //xmlData = client.getData();
+            //Log.d("client data: ", client.getData());
+            return client.getData();
         } catch(Exception e) {
             e.printStackTrace();
+            return null;
         }
     }
 

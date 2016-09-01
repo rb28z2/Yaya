@@ -38,13 +38,21 @@ public class SingleItemView extends AppCompatActivity implements View.OnClickLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         Intent i = getIntent();
+        NetworkHandler networkHandler = new NetworkHandler();
+
+        try {
+            wait(2000);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
 
         intentShow = (Anime) i.getSerializableExtra("show");
 
         title = intentShow.getTitle();
-
+        String xmlData = networkHandler.getXMLData(title, getApplicationContext());
+        Log.d("D",xmlData);
         //Get the view from singleitemview.xml
         setContentView(R.layout.singleitemview);
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
@@ -113,10 +121,8 @@ public class SingleItemView extends AppCompatActivity implements View.OnClickLis
         updatedView.setText(date);
 
         synopsis.setText("...Updating...");
-        NetworkHandler networkHandler = new NetworkHandler();
+        networkHandler.setImage(xmlData, title, intentShow.getId(), imageView, getApplicationContext(), main);
         networkHandler.setSynopsis(title, intentShow.getId(), synopsis, getApplicationContext());
-        networkHandler.downloadXML(title, intentShow.getId(), getApplicationContext());
-        networkHandler.setImage(title, intentShow.getId(), imageView, getApplicationContext(), main);
         synopsis.setMovementMethod(new ScrollingMovementMethod());
         //synopsis.setText(summary);
     }
