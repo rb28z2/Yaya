@@ -2,29 +2,42 @@ package ca.currybox.yaya;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Xml;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.loopj.android.http.*;
 
 import org.jsoup.Jsoup;
 import org.jsoup.parser.Parser;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
 
 
 /**
@@ -35,8 +48,9 @@ public class NetworkHandler {
     private Context ctx;
     private String synopsis;
     private TextView obj;
-    private ImageView imgobj;
+
     private int id;
+    private final malClient client = new malClient();
 
     public void setSynopsis(String title, int id, TextView elem, Context context) {
         ctx = context;
@@ -46,46 +60,116 @@ public class NetworkHandler {
         search.execute(title);
     }
 
-    public void downloadXML(String title){
+    public void setImage(String title, int id, ImageView elem, Context context, RelativeLayout main) {
+        ctx = context;
+        final ImageView imgobj = elem;
+        final RelativeLayout rLay = main;
+        Boolean contains = false;
+
+        //gets all the files in the files folder
+        File fileDir[] = ctx.getFilesDir().listFiles();
+        File theXML = new File("temp.tmp");
+        int index = 0;
+
+        for(File file : fileDir){
+//            System.out.println(file.getName());
+//            System.out.println("Checking:" + (String.valueOf(id) + ".xml")+ " = " + (fileDir[index].getName()));
+            if(!((String.valueOf(id) + ".xml").equals(fileDir[index].getName()))){
+
+            }
+            else {
+                contains = true;
+                theXML = file;
+                //System.out.println("Size:... " + file.length());
+            }
+            index++;
+        }
+
+        if(!contains){
+            System.out.println("NANIIIIIIIII");
+            //try and download xml or give up
+        }
+        else{
+            XMLParser parser = new XMLParser();
+            String s = parser.read(theXML.getName(), ctx);
+//            System.out.println("sssssssE: \""  + s + "\"");
+
+            String syn = s.substring(s.indexOf("<id>" + id + "</id>"));
+
+            syn = syn.substring(syn.indexOf("<image>") + 7, syn.indexOf("</image>"));
+            final int animeID = id;
+
+//            System.out.println("LINKKKK: " + syn);
+            client.getFile(syn, null, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    try{
+                        FileOutputStream fos = ctx.openFileOutput(String.valueOf(animeID) + ".jpg", 775);
+                        fos.write(responseBody);
+
+                        File image = ctx.getFileStreamPath(String.valueOf(animeID) + ".jpg");
+
+                        Bitmap myBitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
+
+                        imgobj.setImageBitmap(myBitmap);
+                        rLay.addView(imgobj);
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    Log.i("Status Failed Code", String.valueOf(statusCode));
+                    Log.i("Code", String.valueOf(statusCode));
+                    Log.i("Body", String.valueOf(responseBody));
+                    Log.i("Reason", String.valueOf(error));
+                }
+            });
+
+            //http://stackoverflow.com/questions/11004744/android-displaying-jpg-image-from-sdcard-using-imageview
+        }
+    }
+
+    public void downloadXML(String title, int id, final Context context){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx); //preferences object
 
         //get credentials to use basic auth in http request
         String userName = prefs.getString("pref_mal_username", "a");
         String password = prefs.getString("pref_mal_password", "a");
-
+        final int animeID = id;
         try {
             //encode so no url BS
             String encode = URLEncoder.encode(title, "utf-8");
 
             //make a new client to talk to mal
-            malClient client = new malClient();
             client.setCreds(userName, password);
 
             //request the .xml for the title in question
-            client.post(encode, null, new AsyncHttpResponseHandler() {
+            client.get(encode, null, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                     Log.i("Status Success Code", String.valueOf(statusCode));
-                    System.out.println("Body:" + responseBody.toString());
+                    try{
+                        FileOutputStream fos = context.openFileOutput(String.valueOf(animeID) + ".xml", context.MODE_PRIVATE);
+                        fos.write(responseBody);
+                    } catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }
 
                 @Override
-                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error ) {
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                     Log.i("Status Failed Code", String.valueOf(statusCode));
                     Log.i("Code", String.valueOf(statusCode));
-                    Log.i("Body", String.valueOf(responseBody.length));
+                    Log.i("Body", String.valueOf(responseBody));
                     Log.i("Reason", String.valueOf(error));
                 }
             });
+
         } catch(Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void setImage(String title, int id, ImageView elem, Context context) {
-        ctx = context;
-        imgobj = elem;
-
     }
 
     private class search extends AsyncTask<String, Void, Void> {

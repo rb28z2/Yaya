@@ -67,7 +67,6 @@ public class animeListView extends Fragment {
     public void updateListView() {
         listview = (ListView) getActivity().findViewById(R.id.shows);
 
-
         adapter = new ListViewAdapter(getActivity(), animeList);
 
         listview.setAdapter(adapter);

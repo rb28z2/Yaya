@@ -115,8 +115,8 @@ public class SingleItemView extends AppCompatActivity implements View.OnClickLis
         synopsis.setText("...Updating...");
         NetworkHandler networkHandler = new NetworkHandler();
         networkHandler.setSynopsis(title, intentShow.getId(), synopsis, getApplicationContext());
-        networkHandler.downloadXML(title);
-        //networkHandler.setImage(title, intentShow.getId(), imageView, getApplicationContext());
+        networkHandler.downloadXML(title, intentShow.getId(), getApplicationContext());
+        networkHandler.setImage(title, intentShow.getId(), imageView, getApplicationContext(), main);
         synopsis.setMovementMethod(new ScrollingMovementMethod());
         //synopsis.setText(summary);
     }
