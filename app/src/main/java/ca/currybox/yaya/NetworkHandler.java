@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
-import android.util.Xml;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,27 +16,20 @@ import com.loopj.android.http.*;
 
 import org.jsoup.Jsoup;
 import org.jsoup.parser.Parser;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
+import ca.currybox.yaya.malClient;
 
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
 
 
 /**
