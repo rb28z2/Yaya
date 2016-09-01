@@ -50,7 +50,7 @@ public class NetworkHandler {
     private TextView obj;
 
     private int id;
-    private final malClient client = new malClient();
+    private malClient client = new malClient();
 
     public void setSynopsis(String title, int id, TextView elem, Context context) {
         ctx = context;
