@@ -39,20 +39,10 @@ public class SingleItemView extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
 
         Intent i = getIntent();
-        NetworkHandler networkHandler = new NetworkHandler();
-
-        try {
-            wait(2000);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
 
         intentShow = (Anime) i.getSerializableExtra("show");
 
         title = intentShow.getTitle();
-        String xmlData = networkHandler.getXMLData(title, getApplicationContext());
-        Log.d("D",xmlData);
         //Get the view from singleitemview.xml
         setContentView(R.layout.singleitemview);
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
@@ -71,6 +61,7 @@ public class SingleItemView extends AppCompatActivity implements View.OnClickLis
         read();
 
         Log.i("INFO", title);
+
         synonyms = intentShow.getSynonyms();
 
         episodes = intentShow.getEpisodes();
@@ -105,7 +96,7 @@ public class SingleItemView extends AppCompatActivity implements View.OnClickLis
 
         //Locate items in layout
         RelativeLayout main = (RelativeLayout) findViewById(R.id.main_layout);
-        ImageView imageView = (ImageView) main.findViewById(R.id.img);
+        final ImageView imageView = (ImageView) main.findViewById(R.id.img);
         TextView titleView = (TextView) main.findViewById(R.id.list_title);
         TextView episodeView = (TextView) main.findViewById(R.id.episodes);
         TextView watchedView = (TextView) main.findViewById(R.id.watched);
@@ -121,7 +112,16 @@ public class SingleItemView extends AppCompatActivity implements View.OnClickLis
         updatedView.setText(date);
 
         synopsis.setText("...Updating...");
-        networkHandler.setImage(xmlData, title, intentShow.getId(), imageView, getApplicationContext(), main);
+
+        //TODO check if image already exists in image directory (make function for that)
+        //TODO add the rest of the details to update using this method
+        final NetworkHandler networkHandler = new NetworkHandler();
+        networkHandler.getXMLData(title, getApplicationContext(), new NetworkHandler.OnDataResponseCallback(){
+            @Override
+            public void onXMLResponse(boolean success, String response){
+                networkHandler.setImage(response, intentShow.getId(), imageView, getApplicationContext());
+        }
+        });
         networkHandler.setSynopsis(title, intentShow.getId(), synopsis, getApplicationContext());
         synopsis.setMovementMethod(new ScrollingMovementMethod());
         //synopsis.setText(summary);

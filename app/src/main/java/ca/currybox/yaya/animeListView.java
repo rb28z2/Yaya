@@ -31,7 +31,6 @@ public class animeListView extends Fragment {
 
         File user = new File(super.getActivity().getFilesDir().toString() + "/user.xml");
 
-
         if (user.exists()) {
             new PopulateList().execute();
         } else {
@@ -45,19 +44,15 @@ public class animeListView extends Fragment {
             public void onRefresh() {
                 Log.i("Refresh", "refresh called");
 
-
                 DownloadUser task = new DownloadUser();
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext()); //preferences object
                 String username = prefs.getString("pref_mal_username", ""); //gets the username from preferences
                 String url = "http://myanimelist.net/malappinfo.php?u=" + username + "&status=all&type=anime"; //creates a valid url
 
-
                 task.execute(url); //get data asynchronously
-
 
             }
         });
-
 
         return view;
     }
@@ -87,15 +82,10 @@ public class animeListView extends Fragment {
 
         @Override
         protected void onPostExecute(Void result) {
-
-
             updateListView();
 
             swipeRefreshLayout.setRefreshing(false);
-
-
         }
-
     }
 
     private class DownloadUser extends AsyncTask<String, Void, Void> {

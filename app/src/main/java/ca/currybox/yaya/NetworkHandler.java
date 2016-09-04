@@ -9,7 +9,6 @@ import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.loopj.android.http.*;
@@ -19,32 +18,32 @@ import org.jsoup.parser.Parser;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 
 import cz.msebera.android.httpclient.Header;
-
 
 /**
  * Created by write_only_mem on 2016-02-14.
  */
 public class NetworkHandler {
-
     private Context ctx;
     private String synopsis;
+    private String xmlResponse;
     private TextView obj;
-
     private int id;
     private malClient client = new malClient();
-    private String xData;
+
+    //Have to use an interface to retain the response
+    public interface OnDataResponseCallback {
+        void onXMLResponse(boolean success, String response);
+    }
 
     public void setSynopsis(String title, int id, TextView elem, Context context) {
         ctx = context;
@@ -54,76 +53,67 @@ public class NetworkHandler {
         search.execute(title);
     }
 
-    public void setImage(String xmlData, String title, int id, ImageView elem, Context context, RelativeLayout main) {
+    //Asynchronously retrieve the image for the id supplied
+    public void setImage(String xmlData, int id, ImageView elem, Context context) {
         ctx = context;
-        final ImageView imgobj = elem;
-        final RelativeLayout rLay = main;
+        final ImageView imageObject = elem;
 
-        //TODO xml data stored in variable in network class soon
-        //System.out.println("madman: " + xmlData);
-        //String syn = getXMLData(title, context);
-        //System.out.println("Bsa: " + syn);
-        System.out.println("Asb: " + xmlData);
-        System.out.println("ccd:" + xData);
-//            syn = xmlData.substring(xmlData.indexOf("<id>" + id + "</id>"));
-//            System.out.println("sadsad: " + syn);
-//
-//            syn = syn.substring(syn.indexOf("<image>") + 7, syn.indexOf("</image>"));
-//            final int animeID = id;
+        String imgURL = xmlData.substring(xmlData.indexOf("<id>" + id + "</id>"));
 
-//         System.out.println("LINKKKK: " + syn);
-//        client.getFile(syn, null, new AsyncHttpResponseHandler() {
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-//                try{
-//                    FileOutputStream fos = ctx.openFileOutput(String.valueOf(animeID) + ".jpg", 775);
-//                    fos.write(responseBody);
-//
-//                    File image = ctx.getFileStreamPath(String.valueOf(animeID) + ".jpg");
-//
-//
-//                    Bitmap myBitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
-//
-//                    imgobj.setImageBitmap(myBitmap);
-//                    rLay.addView(imgobj);
-//                } catch (Exception e){
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-//                Log.i("Status Failed Code", String.valueOf(statusCode));
-//                Log.i("Code", String.valueOf(statusCode));
-//                Log.i("Body", String.valueOf(responseBody));
-//                Log.i("Reason", String.valueOf(error));
-//            }
-//        });
+        imgURL = imgURL.substring(imgURL.indexOf("<image>") + 7, imgURL.indexOf("</image>"));
+        final int animeID = id;
+
+        //Retrieve file and overlay it on the correct imageview
+        client.getFile(imgURL, null, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try{
+                    FileOutputStream fos = ctx.openFileOutput(String.valueOf(animeID) + ".jpg", 775);
+                    fos.write(responseBody);
+
+                    File image = ctx.getFileStreamPath(String.valueOf(animeID) + ".jpg");
+
+                    Bitmap myBitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
+
+                    imageObject.setImageBitmap(myBitmap);
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Log.i("Status Failed Code", String.valueOf(statusCode));
+                Log.i("Code", String.valueOf(statusCode));
+                Log.i("Body", String.valueOf(responseBody));
+                Log.i("Reason", String.valueOf(error));
+            }
+        });
         }
 
-    public String getXMLData(String title, Context cntx){
-        ctx = cntx;
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx); //preferences object
+    public String getXMLData (String title, Context context, final OnDataResponseCallback callback) {
+        ctx = context;
 
-        //get credentials to use basic auth in http request
+        //preferences object to get credentials
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         String userName = prefs.getString("pref_mal_username", "a");
         String password = prefs.getString("pref_mal_password", "a");
 
         try {
             //encode so no url BS
+            //request the .xml for the title in question
             String encode = URLEncoder.encode(title, "utf-8");
 
-            //make a new client to talk to mal
             client.setCreds(userName, password);
-            //request the .xml for the title in question
 
+            //Store response in interface
             client.get(encode, null, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                     Log.i("Status Success Code", String.valueOf(statusCode));
-                    //TODO save xml data in sting instead
-                    xData = new String(responseBody);
-                    client.setData(xData);
+
+                    xmlResponse = new String(responseBody);
+                    callback.onXMLResponse(true, xmlResponse);
                 }
 
                 @Override
@@ -132,17 +122,15 @@ public class NetworkHandler {
                     Log.i("Code", String.valueOf(statusCode));
                     Log.i("Body", String.valueOf(responseBody));
                     Log.i("Reason", String.valueOf(error));
-                }
 
+                    xmlResponse = new String(responseBody);
+                    callback.onXMLResponse(false, xmlResponse);
+                }
             });
-            //bs inner class workaround
-            //xmlData = client.getData();
-            //Log.d("client data: ", client.getData());
-            return client.getData();
         } catch(Exception e) {
             e.printStackTrace();
-            return null;
         }
+        return xmlResponse;
     }
 
     private class search extends AsyncTask<String, Void, Void> {
@@ -197,5 +185,4 @@ public class NetworkHandler {
             Log.i("synopsis", syn);
         }
     }
-
 }

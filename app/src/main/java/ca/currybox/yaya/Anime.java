@@ -1,5 +1,6 @@
 package ca.currybox.yaya;
 
+import java.io.File;
 import java.io.Serializable;
 
 /**
@@ -11,7 +12,7 @@ public class Anime implements Serializable {
     private String title;
     private String synonyms;
     private String custom_synonyms;
-    private String image;
+    private File image;
     private int episodes;
     private int watched;
     private int status;
@@ -44,8 +45,12 @@ public class Anime implements Serializable {
         this.custom_synonyms = synonyms;
     }
 
-    public String getImageURL() {
+    public File getImage() {
         return image;
+    }
+
+    public void setImageURL(File image){
+        this.image = image;
     }
 
     public int getEpisodes() {
