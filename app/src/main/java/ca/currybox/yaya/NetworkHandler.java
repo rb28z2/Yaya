@@ -54,42 +54,46 @@ public class NetworkHandler {
     }
 
     //Asynchronously retrieve the image for the id supplied
-    public void setImage(String xmlData, int id, ImageView elem, Context context) {
+    public void setImage(String xmlData, final int id, ImageView elem, Context context) {
         ctx = context;
         final ImageView imageObject = elem;
+        final String imageName = String.valueOf(id) + ".jpg";
+        final File targetDirectory = new File(ctx.getFilesDir(), "images");
+        final File image = new File(targetDirectory, imageName);
+        targetDirectory.mkdir();
 
         String imgURL = xmlData.substring(xmlData.indexOf("<id>" + id + "</id>"));
-
         imgURL = imgURL.substring(imgURL.indexOf("<image>") + 7, imgURL.indexOf("</image>"));
-        final int animeID = id;
 
-        //Retrieve file and overlay it on the correct imageview
-        client.getFile(imgURL, null, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try{
-                    FileOutputStream fos = ctx.openFileOutput(String.valueOf(animeID) + ".jpg", 775);
-                    fos.write(responseBody);
+        if(image.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
+            imageObject.setImageBitmap(myBitmap);
+        } else {
+            //Retrieve file and overlay it on the correct imageview
+            client.getFile(imgURL, null, new AsyncHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                    try {
+                        FileOutputStream fos = new FileOutputStream(image);
+                        fos.write(responseBody);
 
-                    File image = ctx.getFileStreamPath(String.valueOf(animeID) + ".jpg");
-
-                    Bitmap myBitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
-
-                    imageObject.setImageBitmap(myBitmap);
-                } catch (Exception e){
-                    e.printStackTrace();
+                        Bitmap myBitmap = BitmapFactory.decodeFile(image.getAbsolutePath());
+                        imageObject.setImageBitmap(myBitmap);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.i("Status Failed Code", String.valueOf(statusCode));
-                Log.i("Code", String.valueOf(statusCode));
-                Log.i("Body", String.valueOf(responseBody));
-                Log.i("Reason", String.valueOf(error));
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                    Log.i("Status Failed Code", String.valueOf(statusCode));
+                    Log.i("Code", String.valueOf(statusCode));
+                    Log.i("Body", String.valueOf(responseBody));
+                    Log.i("Reason", String.valueOf(error));
+                }
+            });
         }
+    }
 
     public String getXMLData (String title, Context context, final OnDataResponseCallback callback) {
         ctx = context;

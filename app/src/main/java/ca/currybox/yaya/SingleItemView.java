@@ -58,7 +58,7 @@ public class SingleItemView extends AppCompatActivity implements View.OnClickLis
         read.setOnClickListener(this);
         write.setOnClickListener(this);
 
-        read();
+        //read();
 
         Log.i("INFO", title);
 
