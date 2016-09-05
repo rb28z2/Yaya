@@ -77,6 +77,15 @@ public class animeListView extends Fragment {
 
             animeList = new animeList().getList(doc);
 
+            for(final Anime anime: animeList){
+                final NetworkHandler networkHandler = new NetworkHandler();
+                networkHandler.getXMLData(anime.getTitle(), getContext(), new NetworkHandler.OnDataResponseCallback(){
+                    @Override
+                    public void onXMLResponse(boolean success, String response){
+                        //networkHandler.setImage(response, anime.getId(), );
+                    }
+                });
+            }
             return null;
         }
 

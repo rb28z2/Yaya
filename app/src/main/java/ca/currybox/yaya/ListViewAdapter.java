@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -60,6 +61,7 @@ public class ListViewAdapter extends BaseAdapter {
         holder.watched = (TextView) view.findViewById(R.id.watched);
         holder.status = (TextView) view.findViewById(R.id.list_status);
         holder.updated = (TextView) view.findViewById(R.id.updated);
+        holder.image = (ImageView) view.findViewById(R.id.img);
 
         //Set the results into TextViews
         //Use String.valueOf() to convert int return types to string
@@ -89,6 +91,14 @@ public class ListViewAdapter extends BaseAdapter {
         holder.status.setText(status);
         String date = new SimpleDateFormat("MMM dd yyyy 'at' KK:mm:ss a").format(new Date(animeList.get(position).getUpdated() * 1000L));
         holder.updated.setText(date);
+        final View view2 = view;
+            final NetworkHandler networkHandler = new NetworkHandler();
+            networkHandler.getXMLData(animeList.get(position).getTitle(), context, new NetworkHandler.OnDataResponseCallback(){
+                @Override
+                public void onXMLResponse(boolean success, String response){
+                    networkHandler.setImage(response, animeList.get(position).getId(),(ImageView) view2.findViewById(R.id.img), context);
+                }
+            });
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,7 +160,6 @@ public class ListViewAdapter extends BaseAdapter {
         TextView watched;
         TextView updated;
         TextView status;
+        ImageView image;
     }
-
-
 }

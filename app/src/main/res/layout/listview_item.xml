@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:src="@drawable/ic_launcher" />
-        <!--@TODO Replace this with loading of anime images-->
     <TextView
         android:id="@+id/list_title"
         android:layout_width="wrap_content"
